@@ -5,5 +5,7 @@
 
 Simple, lightweight terminal GUI to manage kernels with the Manjaro Hardware Detection Tool.
 
+![screenshot](https://phoenix1747.github.io/host/keteg.png)
+
 
 2017, Phoenix1747.
