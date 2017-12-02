@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.0
+version=1.1
 
 # LIST INSTALLED
 li() {
@@ -14,7 +14,7 @@ li() {
     then
         echo "[OK] You are using a supported Kernel."
     else
-        echo "[WARNING] You are using an unsupported Kernel! Upgrading is highly recommended."
+        echo "[WARNING] You are using a no longer supported Kernel! Upgrading is highly recommended."
     fi
     echo
     mhwd-kernel -li
@@ -103,8 +103,19 @@ inf() {
     menu
 }
 
-# CHECK FUNCTION
-check() {
+# MAIN MENU
+menu() {
+    clear
+    echo -e "\n# MHWD Kernel Terminal GUI v$version"
+    echo -e "\nChoose one of the following commands:\n"
+    echo "[1] List installed Kernel(s)"
+    echo "[2] List available Kernels"
+    echo "[3] Install Kernel"
+    echo "[4] Remove Kernel"
+    echo "[5] Update System"
+    echo "[6] Info"
+    echo -e "[7] Quit\n"
+    read -p "Command: " cmd
     if [[ $cmd  =~ ^[1-7]+$ ]]
     then
         if [ $cmd = 1 ]
@@ -135,22 +146,6 @@ check() {
         read -n1 -p "Press any key to continue..."
         menu
     fi
-}
-
-# MENUls
-menu() {
-    clear
-    echo -e "\n# MHWD Kernel Terminal GUI v$version"
-    echo -e "\nChoose one of the following commands:\n"
-    echo "[1] List installed Kernel(s)"
-    echo "[2] List available Kernels"
-    echo "[3] Install Kernel"
-    echo "[4] Remove Kernel"
-    echo "[5] Update System"
-    echo "[6] Info"
-    echo -e "[7] Quit\n"
-    read -p "Command: " cmd
-    check
 }
 
 menu
