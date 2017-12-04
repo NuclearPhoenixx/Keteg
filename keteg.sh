@@ -1,15 +1,14 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.1
+version=1.2
 
 # LIST INSTALLED
-li() {
+list_installed() {
     clear
     echo -e "\n# Listing Installed Kernels #"
     echo -e " ---------------------------\n"
-    installed_kernel=$(mhwd-kernel -li | grep -oh "\w*linux\w*" -m1 2>&1)
-    pacman -Ss $installed_kernel > /dev/null 2>&1
+    pacman -Ss $(mhwd-kernel -li | grep -oh "\w*linux\w*" -m1 2>&1) > /dev/null 2>&1
     if [ $? = 0 ]
     then
         echo "[OK] You are using a supported Kernel."
@@ -24,7 +23,7 @@ li() {
 }
 
 # LIST AVAILABLE
-la() {
+list_available() {
     clear
     echo -e "\n# Listing Available Kernels #"
     echo -e " ---------------------------\n"
@@ -35,7 +34,7 @@ la() {
 }
 
 # INSTALL
-ins() {
+install_kernel() {
     clear
     echo -e "\n# Install Kernel #"
     echo -e " ----------------\n"
@@ -64,7 +63,7 @@ ins() {
 }
 
 # REMOVE
-rem() {
+remove_kernel() {
     clear
     echo -e "\n# Remove Kernel #"
     echo -e " ---------------\n"
@@ -79,23 +78,30 @@ rem() {
 }
 
 # UPDATE
-upd() {
+update() {
     clear
-    echo -e "\n# Searching for updates....\n"
-    sudo pacman -Syyu
+    echo -e "\n# Searching for kernel update....\n"
+    sudo pacman -Syy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs 2>&1)
     echo
     read -n1 -p "Press any key to continue..."
     menu
 }
 
 # INFORMATION
-inf() {
+about() {
     clear
     echo -e "\n# Information #"
     echo -e " -------------\n"
-    uname -a
+    echo "Kernel name: $(uname -s)"
+    echo "Host name: $(uname -n)"
+    echo "Kernel release: $(uname -r)"
+    echo "Kernel version: $(uname -v)"
+    echo "Machine: $(uname -m)"
+    echo "Processor: $(uname -p)"
+    echo "Hardware platform: $(uname -i)"
+    echo "Operating system: $(uname -o)"
     echo -e "\n\n----------------------------"
-    echo "| MHWD Kernel Terminal GUI |"
+    echo "| MHWD-Kernel Terminal GUI |"
     echo "----------------------------"
     echo -e "\nKETEG version $version"
     echo -e "by Phoenix1747, 2017.\n\n"
@@ -106,13 +112,13 @@ inf() {
 # MAIN MENU
 menu() {
     clear
-    echo -e "\n# MHWD Kernel Terminal GUI v$version"
+    echo -e "\n# MHWD-Kernel Terminal GUI v$version"
     echo -e "\nChoose one of the following commands:\n"
     echo "[1] List installed Kernel(s)"
     echo "[2] List available Kernels"
     echo "[3] Install Kernel"
     echo "[4] Remove Kernel"
-    echo "[5] Update System"
+    echo "[5] Update Kernel"
     echo "[6] Info"
     echo -e "[7] Quit\n"
     read -p "Command: " cmd
@@ -120,22 +126,22 @@ menu() {
     then
         if [ $cmd = 1 ]
         then
-            li
+            list_installed
         elif [ $cmd = 2 ]
         then
-            la
+            list_available
         elif [ $cmd = 3 ]
         then
-            ins
+            install_kernel
         elif [ $cmd = 4 ]
         then
-            rem
+            remove_kernel
         elif [ $cmd = 5 ]
         then
-            upd
+            update
         elif [ $cmd = 6 ]
         then
-            inf
+            about
         else
             clear
             echo
