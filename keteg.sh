@@ -81,7 +81,7 @@ remove_kernel() {
 update() {
     clear
     echo -e "\n# Searching for kernel update....\n"
-    sudo pacman -Syy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs 2>&1)
+    sudo pacman -Sy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs 2>&1)
     echo
     read -n1 -p "Press any key to continue..."
     menu
