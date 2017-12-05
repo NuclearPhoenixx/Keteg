@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.2
+version=1.0
 
 # LIST INSTALLED
 list_installed() {
     clear
     echo -e "\n# Listing Installed Kernels #"
     echo -e " ---------------------------\n"
-    pacman -Ss $(mhwd-kernel -li | grep -oh "\w*linux\w*" -m1 2>&1) > /dev/null 2>&1
+    pacman -Ss $(ls /boot | grep -oh "\w*linux\w*" | sort -V | tail -1) > /dev/null
     if [ $? = 0 ]
     then
         echo "[OK] You are using a supported Kernel."
@@ -16,7 +16,7 @@ list_installed() {
         echo "[WARNING] You are using a no longer supported Kernel! Upgrading is highly recommended."
     fi
     echo
-    mhwd-kernel -li
+    ls /boot | grep -oh "\w*linux\w*" | sort -r -V
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -27,7 +27,7 @@ list_available() {
     clear
     echo -e "\n# Listing Available Kernels #"
     echo -e " ---------------------------\n"
-    mhwd-kernel -l | grep "\s*linux\s*" 2>&1
+    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | uniq | grep -v sys | grep -v arch | grep -v '\blinux\b' | sort -g
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -38,25 +38,12 @@ install_kernel() {
     clear
     echo -e "\n# Install Kernel #"
     echo -e " ----------------\n"
-    echo "Available Kernels:"
-    mhwd-kernel -l | grep "\s*linux\s*" 2>&1
+    echo -e "Available Kernels:\n"
+    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | uniq | grep -v sys | grep -v arch | grep -v '\blinux\b' | sort -g
     echo
     read -p "# Choose a kernel to install: " kernelinstall
     echo
-    read -p "# Remove current kernel after installing (y/n): " remcurrent
-    if [ "$remcurrent" = "y" ]
-    then
-        echo
-        sudo mhwd-kernel -i $kernelinstall rmc
-    elif [ "$remcurrent" = "n" ]
-    then
-        echo
-        sudo mhwd-kernel -i $kernelinstall
-    else
-        echo -e "\n> Usage error: You have to choose 'y' for yes and 'n' for no."
-        read -n1 -p ""
-        ins
-    fi
+    sudo pacman -Sy $kernelinstall
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -67,11 +54,11 @@ remove_kernel() {
     clear
     echo -e "\n# Remove Kernel #"
     echo -e " ---------------\n"
-    mhwd-kernel -li
+    ls /boot | grep -oh "\w*linux\w*"| sort -r -V
     echo
     read -p "# Choose a kernel to remove: " kernelremove
     echo
-    sudo mhwd-kernel -r $kernelremove
+    sudo pacman -Rnc $kernelremove
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -81,7 +68,7 @@ remove_kernel() {
 update() {
     clear
     echo -e "\n# Searching for kernel update....\n"
-    sudo pacman -Sy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs 2>&1)
+    sudo pacman -Sy --needed $(ls /boot | grep -oh "\w*linux\w*" | xargs)
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -100,10 +87,10 @@ about() {
     echo "Processor: $(uname -p)"
     echo "Hardware platform: $(uname -i)"
     echo "Operating system: $(uname -o)"
-    echo -e "\n\n----------------------------"
-    echo "| MHWD-Kernel Terminal GUI |"
-    echo "----------------------------"
-    echo -e "\nKETEG version $version"
+    echo -e "\n\n--------------------"
+    echo "| Arch Kernel Tool |"
+    echo "--------------------"
+    echo -e "\nArketo version $version"
     echo -e "by Phoenix1747, 2017.\n\n"
     read -n1 -p "Press any key to continue..."
     menu
@@ -112,7 +99,7 @@ about() {
 # MAIN MENU
 menu() {
     clear
-    echo -e "\n# MHWD-Kernel Terminal GUI v$version"
+    echo -e "\n# Arch Kernel Tool v$version"
     echo -e "\nChoose one of the following commands:\n"
     echo "[1] List installed Kernel(s)"
     echo "[2] List available Kernels"
