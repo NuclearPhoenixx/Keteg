@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.0
+version=1.1
 
 # LIST INSTALLED
 list_installed() {
     clear
     echo -e "\n# Listing Installed Kernels #"
     echo -e " ---------------------------\n"
-    pacman -Ss $(ls /boot | grep -oh "\w*linux\w*" | sort -V | tail -1) > /dev/null
+    pacman -Ss $(ls /boot | grep -oh "\w*linux\w*" | sort -V | tail -1)>/dev/null
     if [ $? = 0 ]
     then
         echo "[OK] You are using a supported Kernel."
@@ -65,7 +65,7 @@ remove_kernel() {
 }
 
 # UPDATE
-update() {
+update_kernel() {
     clear
     echo -e "\n# Searching for kernel update....\n"
     sudo pacman -Sy --needed $(ls /boot | grep -oh "\w*linux\w*" | xargs)
@@ -96,6 +96,17 @@ about() {
     menu
 }
 
+# UPDATE PACKAGE SOURCES
+update_sources(){
+    clear
+    echo -e "\n# Updating Package Sources #"
+    echo -e " --------------------------\n"
+    sudo pacman -Syy
+    echo
+    read -n1 -p "Press any key to continue..."
+    menu
+}
+
 # MAIN MENU
 menu() {
     clear
@@ -103,13 +114,14 @@ menu() {
     echo -e "\nChoose one of the following commands:\n"
     echo "[1] List installed Kernel(s)"
     echo "[2] List available Kernels"
-    echo "[3] Install Kernel"
-    echo "[4] Remove Kernel"
-    echo "[5] Update Kernel"
-    echo "[6] Info"
-    echo -e "[7] Quit\n"
+    echo "[3] Install Kernel(s)"
+    echo "[4] Remove Kernel(s)"
+    echo "[5] Update Kernel(s)"
+    echo "[6] Update Package Sources"
+    echo "[7] Info"
+    echo -e "[8] Quit\n"
     read -p "Command: " cmd
-    if [[ $cmd  =~ ^[1-7]+$ ]]
+    if [[ $cmd  =~ ^[1-8]+$ ]]
     then
         if [ $cmd = 1 ]
         then
@@ -125,8 +137,11 @@ menu() {
             remove_kernel
         elif [ $cmd = 5 ]
         then
-            update
+            update_kernel
         elif [ $cmd = 6 ]
+        then
+            update_sources
+        elif [ $cmd = 7 ]
         then
             about
         else
