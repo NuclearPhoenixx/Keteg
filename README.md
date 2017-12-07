@@ -1,6 +1,6 @@
 # mhwd KETEG
 ## Kernel Terminal GUI for Manjaro HardWare Detection Tool
-![issues](https://img.shields.io/github/issues/Phoenix1747/arketo.svg?style=flat-square) ![open pr](https://img.shields.io/github/issues-pr-raw/phoenix1747/arketo.svg?style=flat-square) ![GitHub last commit](https://img.shields.io/github/last-commit/phoenix1747/arketo/manjaro.svg?style=flat-square)
+![issues](https://img.shields.io/github/issues/Phoenix1747/keteg.svg?style=flat-square) ![open pr](https://img.shields.io/github/issues-pr-raw/phoenix1747/keteg.svg?style=flat-square) ![GitHub last commit](https://img.shields.io/github/last-commit/phoenix1747/keteg/mhwd.svg?style=flat-square)
 
 Simple, lightweight terminal GUI to manage kernels with the Manjaro Hardware Detection Tool.
 
