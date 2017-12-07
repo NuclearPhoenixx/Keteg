@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.1
+version=1.2
 
 # LIST INSTALLED
 list_installed() {
@@ -87,10 +87,10 @@ about() {
     echo "Processor: $(uname -p)"
     echo "Hardware platform: $(uname -i)"
     echo "Operating system: $(uname -o)"
-    echo -e "\n\n--------------------"
-    echo "| Arch Kernel Tool |"
-    echo "--------------------"
-    echo -e "\nArketo version $version"
+    echo -e "\n\n-----------------------"
+    echo "| Kernel Terminal GUI |"
+    echo "-----------------------"
+    echo -e "\nKeteg version $version"
     echo -e "by Phoenix1747, 2017.\n\n"
     read -n1 -p "Press any key to continue..."
     menu
@@ -110,7 +110,7 @@ update_sources(){
 # MAIN MENU
 menu() {
     clear
-    echo -e "\n# Arch Kernel Tool v$version"
+    echo -e "\n# Kernel Terminal GUI v$version"
     echo -e "\nChoose one of the following commands:\n"
     echo "[1] List installed Kernel(s)"
     echo "[2] List available Kernels"
@@ -121,34 +121,32 @@ menu() {
     echo "[7] Info"
     echo -e "[8] Quit\n"
     read -p "Command: " cmd
-    if [[ $cmd  =~ ^[1-8]+$ ]]
+    if [ $cmd = 1 ]
     then
-        if [ $cmd = 1 ]
-        then
-            list_installed
-        elif [ $cmd = 2 ]
-        then
-            list_available
-        elif [ $cmd = 3 ]
-        then
-            install_kernel
-        elif [ $cmd = 4 ]
-        then
-            remove_kernel
-        elif [ $cmd = 5 ]
-        then
-            update_kernel
-        elif [ $cmd = 6 ]
-        then
-            update_sources
-        elif [ $cmd = 7 ]
-        then
-            about
-        else
-            clear
-            echo
-            exit 0
-        fi
+        list_installed
+    elif [ $cmd = 2 ]
+    then
+        list_available
+    elif [ $cmd = 3 ]
+    then
+        install_kernel
+    elif [ $cmd = 4 ]
+    then
+        remove_kernel
+    elif [ $cmd = 5 ]
+    then
+        update_kernel
+    elif [ $cmd = 6 ]
+    then
+        update_sources
+    elif [ $cmd = 7 ]
+    then
+        about
+    elif [ $cmd = 8 ]
+    then
+        clear
+        echo
+        exit 0
     else
         echo -e "\n> Usage error: Argument not recognized. Please choose one of the available numbers.\n\n"
         read -n1 -p "Press any key to continue..."
