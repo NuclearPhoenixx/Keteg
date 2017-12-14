@@ -2,18 +2,18 @@
 ## Kernel Terminal GUI
 ![issues](https://img.shields.io/github/issues/Phoenix1747/keteg.svg?style=flat-square) ![open pr](https://img.shields.io/github/issues-pr-raw/phoenix1747/keteg.svg?style=flat-square) ![GitHub last commit](https://img.shields.io/github/last-commit/phoenix1747/keteg.svg?style=flat-square)
 
-Simple, lightweight terminal GUI to manage kernels in Manjaro. This works independently of the Manjaro Hardware Detection tool (mhwd)!
+Simple and lightweight terminal GUI to manage kernels in Manjaro. This works independently of the Manjaro Hardware Detection tool (mhwd)!
 
 _The branch ```mhwd``` contains the same kernel update script but implemented with the system tool mhwd-kernel. You can use either one, whatever you prefer._
 
 ---
 
-Usage: You can execute this script like any other shell script. If you don't know how to do this:
+Usage: You can execute this script like any other shell script. You have two easy ways to do so:
 
 ```
 $ sh keteg.sh
 ```
-or 
+~ OR ~
 ```
 $ chmod +x keteg.sh
 $ ./keteg.sh

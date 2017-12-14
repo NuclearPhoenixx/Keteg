@@ -1,14 +1,23 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.2
+version=1.3
+
+# List all the available kernels
+list_all_available_kernels() {
+    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | grep -v sys | grep -v arch | grep -v '\blinux\b' | uniq | sort
+}
+# List all installed kernels
+list_all_installed_kernels() {
+    ls /boot | grep -oh "\w*linux\w*" | sort -r -V
+}
 
 # LIST INSTALLED
 list_installed() {
     clear
     echo -e "\n# Listing Installed Kernels #"
     echo -e " ---------------------------\n"
-    pacman -Ss $(ls /boot | grep -oh "\w*linux\w*" | sort -V | tail -1)>/dev/null
+    pacman -Si $(ls /boot | grep -oh "\w*linux\w*" | sort -V | tail -1)>/dev/null
     if [ $? = 0 ]
     then
         echo "[OK] You are using a supported Kernel."
@@ -16,7 +25,7 @@ list_installed() {
         echo "[WARNING] You are using a no longer supported Kernel! Upgrading is highly recommended."
     fi
     echo
-    ls /boot | grep -oh "\w*linux\w*" | sort -r -V
+    list_all_installed_kernels
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -27,7 +36,7 @@ list_available() {
     clear
     echo -e "\n# Listing Available Kernels #"
     echo -e " ---------------------------\n"
-    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | uniq | grep -v sys | grep -v arch | grep -v '\blinux\b' | sort -g
+    list_all_available_kernels
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -39,7 +48,7 @@ install_kernel() {
     echo -e "\n# Install Kernel #"
     echo -e " ----------------\n"
     echo -e "Available Kernels:\n"
-    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | uniq | grep -v sys | grep -v arch | grep -v '\blinux\b' | sort -g
+    list_all_available_kernels
     echo
     read -p "# Choose a kernel to install: " kernelinstall
     echo
@@ -54,7 +63,7 @@ remove_kernel() {
     clear
     echo -e "\n# Remove Kernel #"
     echo -e " ---------------\n"
-    ls /boot | grep -oh "\w*linux\w*"| sort -r -V
+    list_all_installed_kernels
     echo
     read -p "# Choose a kernel to remove: " kernelremove
     echo
@@ -68,7 +77,7 @@ remove_kernel() {
 update_kernel() {
     clear
     echo -e "\n# Searching for kernel update....\n"
-    sudo pacman -Sy --needed $(ls /boot | grep -oh "\w*linux\w*" | xargs)
+    sudo pacman -Sy --needed $(list_all_installed_kernels)
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -120,29 +129,29 @@ menu() {
     echo "[6] Update Package Sources"
     echo "[7] Info"
     echo -e "[8] Quit\n"
-    read -p "Command: " cmd
-    if [ $cmd = 1 ]
+    read -p "Command: " arg
+    if [ $arg = 1 ]
     then
         list_installed
-    elif [ $cmd = 2 ]
+    elif [ $arg = 2 ]
     then
         list_available
-    elif [ $cmd = 3 ]
+    elif [ $arg = 3 ]
     then
         install_kernel
-    elif [ $cmd = 4 ]
+    elif [ $arg = 4 ]
     then
         remove_kernel
-    elif [ $cmd = 5 ]
+    elif [ $arg = 5 ]
     then
         update_kernel
-    elif [ $cmd = 6 ]
+    elif [ $arg = 6 ]
     then
         update_sources
-    elif [ $cmd = 7 ]
+    elif [ $arg = 7 ]
     then
         about
-    elif [ $cmd = 8 ]
+    elif [ $arg = 8 ]
     then
         clear
         echo
@@ -153,4 +162,5 @@ menu() {
         menu
     fi
 }
+
 menu
