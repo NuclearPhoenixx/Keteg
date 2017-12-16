@@ -1,14 +1,18 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.2
+version=1.2.1
+
+list_available_kernels() {
+    mhwd-kernel -l | grep "\s*linux\s*" | sort -rV
+}
 
 # LIST INSTALLED
 list_installed() {
     clear
     echo -e "\n# Listing Installed Kernels #"
     echo -e " ---------------------------\n"
-    pacman -Ss $(mhwd-kernel -li | grep -oh "\w*linux\w*" -m1 2>&1) > /dev/null 2>&1
+    pacman -Ss $(mhwd-kernel -li | grep -oh "\w*linux\w*" -m1)>/dev/null
     if [ $? = 0 ]
     then
         echo "[OK] You are using a supported Kernel."
@@ -27,7 +31,7 @@ list_available() {
     clear
     echo -e "\n# Listing Available Kernels #"
     echo -e " ---------------------------\n"
-    mhwd-kernel -l | grep "\s*linux\s*" 2>&1
+    list_available_kernels
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -39,7 +43,7 @@ install_kernel() {
     echo -e "\n# Install Kernel #"
     echo -e " ----------------\n"
     echo "Available Kernels:"
-    mhwd-kernel -l | grep "\s*linux\s*" 2>&1
+    list_available_kernels
     echo
     read -p "# Choose a kernel to install: " kernelinstall
     echo
@@ -55,7 +59,7 @@ install_kernel() {
     else
         echo -e "\n> Usage error: You have to choose 'y' for yes and 'n' for no."
         read -n1 -p ""
-        ins
+        install_kernel
     fi
     echo
     read -n1 -p "Press any key to continue..."
@@ -81,7 +85,7 @@ remove_kernel() {
 update() {
     clear
     echo -e "\n# Searching for kernel update....\n"
-    sudo pacman -Sy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs 2>&1)
+    sudo pacman -Sy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs)
     echo
     read -n1 -p "Press any key to continue..."
     menu
@@ -116,9 +120,9 @@ menu() {
     echo -e "\nChoose one of the following commands:\n"
     echo "[1] List installed Kernel(s)"
     echo "[2] List available Kernels"
-    echo "[3] Install Kernel"
-    echo "[4] Remove Kernel"
-    echo "[5] Update Kernel"
+    echo "[3] Install Kernel(s)"
+    echo "[4] Remove Kernel(s)"
+    echo "[5] Update Kernel(s)"
     echo "[6] Info"
     echo -e "[7] Quit\n"
     read -p "Command: " cmd
@@ -144,7 +148,6 @@ menu() {
             about
         else
             clear
-            echo
             exit 0
         fi
     else
