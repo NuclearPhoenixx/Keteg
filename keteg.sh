@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.3
+version=1.3.1
 
 # List all the available kernels
 list_all_available_kernels() {
-    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | grep -v sys | grep -v arch | grep -v '\blinux\b' | uniq | sort
+    pacman -Ss | grep core/ | grep -o "\w*linux\w*" | grep -vE "sys|arch|\blinux\b" | uniq | sort -rV
 }
 # List all installed kernels
 list_all_installed_kernels() {
-    ls /boot | grep -oh "\w*linux\w*" | sort -r -V
+    ls /boot | grep -oh "\w*linux\w*" | sort -rV
 }
 
 # LIST INSTALLED
@@ -154,7 +154,6 @@ menu() {
     elif [ $arg = 8 ]
     then
         clear
-        echo
         exit 0
     else
         echo -e "\n> Usage error: Argument not recognized. Please choose one of the available numbers.\n\n"
