@@ -1,7 +1,12 @@
 #!/bin/bash
 
 # VERSION CODE
-version=1.2.1
+version=2.0.0
+# headline color
+COLOR_blue="\033[1;34m"
+COLOR_reset="\033[0m"
+COLOR_green="\033[0;32m"
+COLOR_red="\033[1;31m"
 
 list_available_kernels() {
     mhwd-kernel -l | grep "\s*linux\s*" | sort -rV
@@ -9,93 +14,74 @@ list_available_kernels() {
 
 # LIST INSTALLED
 list_installed() {
-    clear
-    echo -e "\n# Listing Installed Kernels #"
-    echo -e " ---------------------------\n"
+    echo -e "\n${COLOR_blue} Listing Installed Kernels${COLOR_reset}"
+    echo -e " -------------------------\n"
     pacman -Ss $(mhwd-kernel -li | grep -oh "\w*linux\w*" -m1)>/dev/null
     if [ $? = 0 ]
     then
-        echo "[OK] You are using a supported Kernel."
+        echo -e "${COLOR_green}[OK] You are using a supported Kernel.${COLOR_reset}"
     else
-        echo "[WARNING] You are using a no longer supported Kernel! Upgrading is highly recommended."
+        echo -e "${COLOR_red}[WARNING] You are using a no longer supported Kernel! Upgrading is highly recommended.${COLOR_reset}"
     fi
     echo
     mhwd-kernel -li
-    echo
-    read -n1 -p "Press any key to continue..."
-    menu
 }
 
 # LIST AVAILABLE
 list_available() {
-    clear
-    echo -e "\n# Listing Available Kernels #"
-    echo -e " ---------------------------\n"
+    echo -e "\n${COLOR_blue} Listing Available Kernels${COLOR_reset}"
+    echo -e " -------------------------\n"
     list_available_kernels
-    echo
-    read -n1 -p "Press any key to continue..."
-    menu
 }
 
 # INSTALL
 install_kernel() {
-    clear
-    echo -e "\n# Install Kernel #"
-    echo -e " ----------------\n"
-    echo "Available Kernels:"
+    echo -e "\n${COLOR_blue} Install Kernel${COLOR_reset}"
+    echo -e " --------------\n"
+    echo -e "Available Kernels:\n"
     list_available_kernels
     echo
+    trap "return" SIGINT
     read -p "# Choose a kernel to install: " kernelinstall
     echo
+    trap "return" SIGINT
     read -p "# Remove current kernel after installing (y/n): " remcurrent
+    echo
     if [ "$remcurrent" = "y" ]
     then
-        echo
         sudo mhwd-kernel -i $kernelinstall rmc
     elif [ "$remcurrent" = "n" ]
     then
-        echo
         sudo mhwd-kernel -i $kernelinstall
     else
-        echo -e "\n> Usage error: You have to choose 'y' for yes and 'n' for no."
+        usage_error
         read -n1 -p ""
         install_kernel
     fi
-    echo
-    read -n1 -p "Press any key to continue..."
-    menu
 }
 
 # REMOVE
 remove_kernel() {
-    clear
-    echo -e "\n# Remove Kernel #"
-    echo -e " ---------------\n"
+    echo -e "\n${COLOR_blue} Remove Kernel${COLOR_reset}"
+    echo -e " -------------\n"
     mhwd-kernel -li
     echo
+    trap "return" SIGINT
     read -p "# Choose a kernel to remove: " kernelremove
     echo
     sudo mhwd-kernel -r $kernelremove
-    echo
-    read -n1 -p "Press any key to continue..."
-    menu
 }
 
 # UPDATE
-update() {
-    clear
-    echo -e "\n# Searching for kernel update....\n"
+update_kernel() {
+    echo -e "\n${COLOR_blue} Searching for kernel update...${COLOR_reset}\n"
     sudo pacman -Sy --needed $(mhwd-kernel -li | grep -oh "\w*linux\w*" | xargs)
-    echo
-    read -n1 -p "Press any key to continue..."
-    menu
 }
 
 # INFORMATION
 about() {
-    clear
-    echo -e "\n# Information #"
-    echo -e " -------------\n"
+    echo -e "\n${COLOR_blue} Information${COLOR_reset}"
+    echo -e " -----------\n"
     echo "Kernel name: $(uname -s)"
     echo "Host name: $(uname -n)"
     echo "Kernel release: $(uname -r)"
@@ -104,57 +90,66 @@ about() {
     echo "Processor: $(uname -p)"
     echo "Hardware platform: $(uname -i)"
     echo "Operating system: $(uname -o)"
-    echo -e "\n\n----------------------------"
+    echo -e "\n\n${COLOR_blue}+--------------------------+"
     echo "| MHWD-Kernel Terminal GUI |"
-    echo "----------------------------"
-    echo -e "\nKETEG version $version"
-    echo -e "by Phoenix1747, 2017.\n\n"
-    read -n1 -p "Press any key to continue..."
-    menu
+    echo -e "+--------------------------+${COLOR_reset}"
+    echo -e "\nKeteg version $version"
+    echo -e "by Phoenix1747, 2017.\n"
+}
+
+usage_error() {
+  echo -e "\n${COLOR_red}> Usage error: Argument not recognized. Please choose one of the available numbers.${COLOR_reset}"
 }
 
 # MAIN MENU
 menu() {
     clear
-    echo -e "\n# MHWD-Kernel Terminal GUI v$version"
+    echo -e "\n${COLOR_blue}MHWD-Kernel Terminal GUI $version${COLOR_reset}"
     echo -e "\nChoose one of the following commands:\n"
-    echo "[1] List installed Kernel(s)"
-    echo "[2] List available Kernels"
-    echo "[3] Install Kernel(s)"
-    echo "[4] Remove Kernel(s)"
-    echo "[5] Update Kernel(s)"
-    echo "[6] Info"
-    echo -e "[7] Quit\n"
-    read -p "Command: " cmd
-    if [[ $cmd  =~ ^[1-7]+$ ]]
+    echo " [1] List installed Kernel(s)"
+    echo " [2] List available Kernels"
+    echo " [3] Install Kernel(s)"
+    echo " [4] Remove Kernel(s)"
+    echo " [5] Update Kernel(s)"
+    echo " [6] Info"
+    echo -e " [7] Quit\n"
+    read -p "Command: " arg
+    if [ "$arg" = "1" ]
     then
-        if [ $cmd = 1 ]
-        then
-            list_installed
-        elif [ $cmd = 2 ]
-        then
-            list_available
-        elif [ $cmd = 3 ]
-        then
-            install_kernel
-        elif [ $cmd = 4 ]
-        then
-            remove_kernel
-        elif [ $cmd = 5 ]
-        then
-            update
-        elif [ $cmd = 6 ]
-        then
-            about
-        else
-            clear
-            exit 0
-        fi
+      clear
+      list_installed
+    elif [ "$arg" = "2" ]
+    then
+      clear
+      list_available
+    elif [ "$arg" = "3" ]
+    then
+      clear
+      install_kernel
+    elif [ "$arg" = "4" ]
+    then
+      clear
+      remove_kernel
+    elif [ "$arg" = "5" ]
+    then
+      clear
+      update_kernel
+    elif [ "$arg" = "6" ]
+    then
+      clear
+      about
+    elif [ "$arg" = "7" ]
+    then
+      clear
+      exit
     else
-        echo -e "\n> Usage error: Argument not recognized. Please choose one of the available numbers.\n\n"
-        read -n1 -p "Press any key to continue..."
-        menu
+      usage_error
     fi
+    echo
+    read -n1 -p "Press any key to continue..."
 }
 
-menu
+while true
+do
+  menu
+done
