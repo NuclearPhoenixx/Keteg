@@ -9,7 +9,7 @@ Simple, lightweight terminal GUI to manage kernels with the Manjaro Hardware Det
 Usage: You can execute this script like any other shell script. If you don't know how to do this:
 
 ```
-$ sh keteg.sh
+$ bash keteg.sh
 ```
 or 
 ```
