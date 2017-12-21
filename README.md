@@ -11,7 +11,7 @@ _The branch ```mhwd``` contains the same kernel update script but implemented wi
 Usage: You can execute this script like any other shell script. You have two easy ways to do so:
 
 ```
-$ sh keteg.sh
+$ bash keteg.sh
 ```
 ~ OR ~
 ```
