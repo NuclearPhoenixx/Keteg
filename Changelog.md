@@ -1,5 +1,8 @@
 # Changelog
 
+2.0.1:
+* Small code change.
+
 2.0.0:
 * Fixed issue #2 about function nesting.
 * Added colors!

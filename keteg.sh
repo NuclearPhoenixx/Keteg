@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # VERSION CODE
-version=2.0.0
+version=2.0.1
 # headline color
 COLOR_blue="\033[1;34m"
 COLOR_reset="\033[0m"
@@ -110,41 +110,34 @@ menu() {
     echo " [7] Info"
     echo -e " [8] Quit\n"
     read -p "Command: " arg
-    if [ "$arg" = "1" ]
-    then
-      clear
-      list_installed
-    elif [ "$arg" = "2" ]
-    then
-      clear
-      list_available
-    elif [ "$arg" = "3" ]
-    then
-      clear
-      install_kernel
-    elif [ "$arg" = "4" ]
-    then
-      clear
-      remove_kernel
-    elif [ "$arg" = "5" ]
-    then
-      clear
-      update_kernel
-    elif [ "$arg" = "6" ]
-    then
-      clear
-      update_sources
-    elif [ "$arg" = "7" ]
-    then
-      clear
-      about
-    elif [ "$arg" = "8" ]
-    then
-      clear
-      exit
-    else
-      echo -e "\n${COLOR_red}> Usage error: Argument not recognized. Please choose one of the available numbers.${COLOR_reset}"
-    fi
+    case $arg in
+      1) #List installed kernels
+        clear
+        list_installed;;
+      2) #List available kernels
+        clear
+        list_available;;
+      3) #Install a new kernel
+        clear
+        install_kernel;;
+      4) #Remove an installed kernel
+        clear
+        remove_kernel;;
+      5) #Update an existing kernel
+        clear
+        update_kernel;;
+      6) #Update the package sources
+        clear
+        update_sources;;
+      7) #Go to about tab
+        clear
+        about;;
+      8) #Exit
+        clear
+        exit;;
+      *) #Else unknown
+        echo -e "\n${COLOR_red}> Usage error: Argument not recognized. Please choose one of the available numbers.${COLOR_reset}"
+    esac
     echo
     read -n1 -p "Press any key to continue..."
 }
