@@ -86,7 +86,7 @@ about() {
     echo "| Kernel Terminal GUI |"
     echo -e "+---------------------+${COLOR_reset}"
     echo -e "\nKeteg version $version"
-    echo -e "by Phoenix1747, 2017.\n"
+    echo -e "by Phoenix1747, 2018.\n"
 }
 
 # UPDATE PACKAGE SOURCES

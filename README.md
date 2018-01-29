@@ -23,4 +23,4 @@ $ ./keteg
 
 ![screenshot](https://phoenix1747.github.io/host/keteg-master.png)
 
-2017, Phoenix1747.
+2018, Phoenix1747.
