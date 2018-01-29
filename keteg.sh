@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # VERSION CODE
-version=2.0.1
+version=2.0.2
 # headline color
 COLOR_blue="\033[1;34m"
 COLOR_reset="\033[0m"
