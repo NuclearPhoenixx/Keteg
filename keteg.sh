@@ -103,8 +103,8 @@ usage_error() {
 # MAIN MENU
 menu() {
     clear
-    echo -e "\n${COLOR_blue}MHWD-Kernel Terminal GUI $version${COLOR_reset}"
-    echo -e "\nChoose one of the following commands:\n"
+    echo -e "\n${COLOR_blue}KETEG $version ${COLOR_reset}"
+    echo -e "\nChoose from the following commands:\n"
     echo " [1] List installed Kernel(s)"
     echo " [2] List available Kernels"
     echo " [3] Install Kernel(s)"
@@ -112,7 +112,7 @@ menu() {
     echo " [5] Update Kernel(s)"
     echo " [6] Info"
     echo -e " [7] Quit\n"
-    read -p "Command: " arg
+    read -p ":: " arg
     case $arg in
       1)  # List installed kernels
         clear
