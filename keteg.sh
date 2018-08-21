@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # VERSION CODE
-version=2.0.3
+version=2.0.4
 # headline color
 COLOR_blue="\033[1;34m"
 COLOR_reset="\033[0m"
@@ -103,7 +103,7 @@ usage_error() {
 # MAIN MENU
 menu() {
     clear
-    echo -e "\n${COLOR_blue}KETEG $version ${COLOR_reset}"
+    echo -e "\n${COLOR_blue}KETEG $version${COLOR_reset}"
     echo -e "\nChoose from the following commands:\n"
     echo " [1] List installed Kernel(s)"
     echo " [2] List available Kernels"
