@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # VERSION CODE
-version=2.0.2
+version=2.0.3
 # headline color
 COLOR_blue="\033[1;34m"
 COLOR_reset="\033[0m"
@@ -9,7 +9,7 @@ COLOR_green="\033[0;32m"
 COLOR_red="\033[1;31m"
 
 list_available_kernels() {
-    mhwd-kernel -l | grep "\s*linux\s*" | sort -rV
+    mhwd-kernel -l
 }
 
 # LIST INSTALLED
@@ -38,7 +38,6 @@ list_available() {
 install_kernel() {
     echo -e "\n${COLOR_blue} Install Kernel${COLOR_reset}"
     echo -e " --------------\n"
-    echo -e "Available Kernels:\n"
     list_available_kernels
     echo
     trap "return" SIGINT
