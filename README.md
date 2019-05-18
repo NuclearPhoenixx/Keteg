@@ -21,4 +21,4 @@ $ ./keteg.sh
 
 ---
 
-![screenshot](https://phoenix1747.github.io/host/keteg.png)
+![screenshot](screenshots/keteg.png)
